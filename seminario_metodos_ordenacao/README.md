@@ -25,31 +25,21 @@ O objetivo do projeto é permitir que o estudo dos algoritmos de ordenação sej
 
 O fluxo geral é:
 
-```text
-             VETOR DE ENTRADA
-                    │
-                    ▼
-             Algoritmo em C
-                    │
-                    ▼
-             Log de eventos
-                    │
-                    ▼
-        codigo_ordenacao.py
-                    │
-          ┌─────────┼─────────┐
-          │         │         │
-          ▼         ▼         ▼
-        PNGs     Tabelas   Métricas
-          │         │         │
-          └─────────┼─────────┘
-                    │
-                    ▼
-             main_auto.tex
-                    │
-                    ▼
-                 PDF
-```
+flowchart TD
+    A["Vetor de entrada"] --> B["Algoritmos de ordenação<br/>C"]
+    B --> C["Logs de execução"]
+
+    C --> D["Análise e processamento<br/>codigo_ordenacao.py"]
+
+    D --> E["Visualizações<br/>PNG"]
+    D --> F["Tabelas<br/>LaTeX"]
+    D --> G["Métricas<br/>JSON / dados"]
+
+    E --> H["Apresentação<br/>main_auto.tex"]
+    F --> H
+    G --> H
+
+    H --> I["PDF"]
 
 Assim, se o algoritmo ou o vetor de entrada forem modificados, é possível gerar novamente os resultados automaticamente.
 
@@ -58,33 +48,37 @@ Assim, se o algoritmo ou o vetor de entrada forem modificados, é possível gera
 # 2. Arquitetura do projeto
 
 A arquitetura principal foi construída em camadas.
+flowchart TD
+    H["ordenacao.h"]
 
-```text
-                         ordenacao.h
-                       /             \
-                      ↓               ↓
-              algum_algoritmo.c   outro_algoritmo.c
-                    ↓                 ↓
-               algum_algoritmo   outro_algoritmo
-                    \                 /
-                     \               /
-                      ↓             ↓
-                       logs de eventos
-                              │
-                              ▼
-                    codigo_ordenacao.py
-                              │
-                    ┌─────────┴─────────┐
-                    ↓                   ↓
-                  PNGs                tabelas
-                    \                   /
-                     \                 /
-                      ↓               ↓
-                       main_auto.tex
-                              │
-                              ▼
-                         PDF/Beamer
-```
+    H --> C1["algoritmo_1.c"]
+    H --> C2["algoritmo_2.c"]
+
+    C1 --> B1["Compilação"]
+    C2 --> B2["Compilação"]
+
+    B1 --> E1["Executável 1"]
+    B2 --> E2["Executável 2"]
+
+    E1 --> L["Logs de eventos"]
+    E2 --> L
+
+    L --> PY["codigo_ordenacao.py"]
+
+    PY --> P["Gráficos PNG"]
+    PY --> T["Tabelas LaTeX"]
+    PY --> M["Métricas"]
+
+    P --> TEX["main_auto.tex"]
+    T --> TEX
+    M --> TEX
+
+    TEX --> PDF["PDF / Beamer"]
+
+    MK["Makefile"] -.-> B1
+    MK -.-> B2
+    MK -.-> PY
+    MK -.-> TEX
 
 Essa separação é importante porque cada componente possui uma responsabilidade específica.
 
@@ -175,15 +169,15 @@ Ele trabalha com os eventos produzidos pelos algoritmos.
 
 A partir desses eventos, pode gerar:
 
-```text
-          LOG
-           │
-           ▼
-codigo_ordenacao.py
-     │       │       │
-     ▼       ▼       ▼
-   PNGs   Tabelas  Métricas
-```
+flowchart TD
+    LOG["LOG"]
+    PY["codigo_ordenacao.py"]
+
+    LOG --> PY
+
+    PY --> PNG["PNGs"]
+    PY --> TAB["Tabelas"]
+    PY --> MET["Métricas"]
 
 ---
 
@@ -955,39 +949,32 @@ Merge Sort              Selection Sort
 
 A ideia central pode ser resumida em:
 
-```text
-                    ordenacao.h
-                         │
-             ┌───────────┼───────────┐
-             │           │           │
-             ▼           ▼           ▼
-          bubble.c     merge.c    selection.c
-             │           │           │
-             ▼           ▼           ▼
-          Bubble       Merge      Selection
-           Sort         Sort        Sort
-             │           │           │
-             └───────────┼───────────┘
-                         │
-                         ▼
-                  logs de eventos
-                         │
-                         ▼
-              codigo_ordenacao.py
-                         │
-             ┌───────────┼───────────┐
-             │           │           │
-             ▼           ▼           ▼
-           PNGs       Tabelas      Métricas
-             │           │           │
-             └───────────┼───────────┘
-                         │
-                         ▼
-                   main_auto.tex
-                         │
-                         ▼
-                    main_auto.pdf
-```
+flowchart TD
+    H["ordenacao.h"]
+
+    H --> B["bubble.c"]
+    H --> M["merge.c"]
+    H --> S["selection.c"]
+
+    B --> BS["Bubble Sort"]
+    M --> MS["Merge Sort"]
+    S --> SS["Selection Sort"]
+
+    BS --> LOG["Logs de eventos"]
+    MS --> LOG
+    SS --> LOG
+
+    LOG --> PY["codigo_ordenacao.py"]
+
+    PY --> PNG["PNGs"]
+    PY --> TAB["Tabelas"]
+    PY --> MET["Métricas"]
+
+    PNG --> TEX["main_auto.tex"]
+    TAB --> TEX
+    MET --> TEX
+
+    TEX --> PDF["main_auto.pdf"]
 
 Essa arquitetura permite adicionar algoritmos sem modificar a ideia fundamental do sistema.
 
@@ -1227,32 +1214,27 @@ O aluno implementa seu algoritmo em C, utiliza a interface definida em `ordenaca
 
 O resultado é um fluxo automatizado:
 
-```text
-                  SEU ALGORITMO
-                        │
-                        ▼
-                    seu_alg.c
-                        │
-                        ▼
-                  seu_algoritmo
-                        │
-                        ▼
-                     LOG
-                        │
-                        ▼
-             codigo_ordenacao.py
-                        │
-          ┌─────────────┼─────────────┐
-          ▼             ▼             ▼
-        FRAMES        TABELAS      MÉTRICAS
-          │             │             │
-          └─────────────┼─────────────┘
-                        ▼
-                  main_auto.tex
-                        │
-                        ▼
-                       PDF
-```
+flowchart TD
+    ALG["Seu algoritmo"]
+    SRC["seu_alg.c"]
+    EXE["seu_algoritmo"]
+    LOG["LOG"]
+    PY["codigo_ordenacao.py"]
+
+    ALG --> SRC
+    SRC --> EXE
+    EXE --> LOG
+    LOG --> PY
+
+    PY --> FRAMES["Frames"]
+    PY --> TAB["Tabelas"]
+    PY --> MET["Métricas"]
+
+    FRAMES --> TEX["main_auto.tex"]
+    TAB --> TEX
+    MET --> TEX
+
+    TEX --> PDF["PDF"]
 
 A principal ideia é que cada grupo seja capaz de colocar seu próprio algoritmo dentro dessa arquitetura e utilizar a mesma infraestrutura para realizar, visualizar e apresentar seu experimento.
 
