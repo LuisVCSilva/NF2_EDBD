@@ -25,6 +25,7 @@ O objetivo do projeto é permitir que o estudo dos algoritmos de ordenação sej
 
 O fluxo geral é:
 
+```mermaid
 flowchart TD
     A["Vetor de entrada"] --> B["Algoritmos de ordenação<br/>C"]
     B --> C["Logs de execução"]
@@ -40,7 +41,7 @@ flowchart TD
     G --> H
 
     H --> I["PDF"]
-
+```
 Assim, se o algoritmo ou o vetor de entrada forem modificados, é possível gerar novamente os resultados automaticamente.
 
 ---
@@ -48,6 +49,7 @@ Assim, se o algoritmo ou o vetor de entrada forem modificados, é possível gera
 # 2. Arquitetura do projeto
 
 A arquitetura principal foi construída em camadas.
+```mermaid
 flowchart TD
     H["ordenacao.h"]
 
@@ -79,7 +81,7 @@ flowchart TD
     MK -.-> B2
     MK -.-> PY
     MK -.-> TEX
-
+```
 Essa separação é importante porque cada componente possui uma responsabilidade específica.
 
 ## Camada 1 — Algoritmo
@@ -168,7 +170,7 @@ Ele não precisa conhecer a implementação interna do Bubble Sort, Merge Sort o
 Ele trabalha com os eventos produzidos pelos algoritmos.
 
 A partir desses eventos, pode gerar:
-
+```mermaid
 flowchart TD
     LOG["LOG"]
     PY["codigo_ordenacao.py"]
@@ -178,7 +180,7 @@ flowchart TD
     PY --> PNG["PNGs"]
     PY --> TAB["Tabelas"]
     PY --> MET["Métricas"]
-
+```
 ---
 
 ## Camada 5 — Apresentação
@@ -948,7 +950,7 @@ Merge Sort              Selection Sort
 # 25. Arquitetura para expansão
 
 A ideia central pode ser resumida em:
-
+```mermaid
 flowchart TD
     H["ordenacao.h"]
 
@@ -975,7 +977,7 @@ flowchart TD
     MET --> TEX
 
     TEX --> PDF["main_auto.pdf"]
-
+```
 Essa arquitetura permite adicionar algoritmos sem modificar a ideia fundamental do sistema.
 
 ---
@@ -1213,7 +1215,7 @@ APRESENTAÇÃO
 O aluno implementa seu algoritmo em C, utiliza a interface definida em `ordenacao.h`, adiciona o programa ao `Makefile` e passa a utilizar a infraestrutura existente para executar seus próprios experimentos.
 
 O resultado é um fluxo automatizado:
-
+```mermaid
 flowchart TD
     ALG["Seu algoritmo"]
     SRC["seu_alg.c"]
@@ -1235,6 +1237,6 @@ flowchart TD
     MET --> TEX
 
     TEX --> PDF["PDF"]
-
+```
 A principal ideia é que cada grupo seja capaz de colocar seu próprio algoritmo dentro dessa arquitetura e utilizar a mesma infraestrutura para realizar, visualizar e apresentar seu experimento.
 
