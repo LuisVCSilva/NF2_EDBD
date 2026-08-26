@@ -1,0 +1,39 @@
+# Ignora absolutamente tudo por padrão
+*
+
+# Mas permite que pastas e arquivos específicos continuem sendo rastreados
+!/.gitignore
+!/Makefile
+
+# Permite arquivos de código-fonte e cabeçalhos
+!/*.c
+!/*.h
+!/AVL/
+!/BST/
+!/fila/
+!/pilha/
+!/lista/
+!/apps/
+
+# Permite recursivamente arquivos dentro das pastas do projeto
+/AVL/**/*.c
+/AVL/**/*.h
+/BST/**/*.c
+/BST/**/*.h
+/fila/**/*.c
+/fila/**/*.h
+/pilha/**/*.c
+/pilha/**/*.h
+/lista/**/*.c
+/lista/**/*.h
+/apps/**/*.c
+/apps/**/*.h
+
+# Ignora arquivos temporários de sistemas e IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
