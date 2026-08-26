@@ -1,39 +1,68 @@
-# Ignora absolutamente tudo por padrão
-*
+# ============================================================
+# Arquivos compilados C/C++
+# ============================================================
 
-# Mas permite que pastas e arquivos específicos continuem sendo rastreados
-!/.gitignore
-!/Makefile
+*.o
+*.a
+*.so
+*.out
 
-# Permite arquivos de código-fonte e cabeçalhos
-!/*.c
-!/*.h
-!/AVL/
-!/BST/
-!/fila/
-!/pilha/
-!/lista/
-!/apps/
+# Executáveis gerados
+/codigos/app_bst
+/codigos/app_fila
+/codigos/app_lista
+/codigos/estoque
+/codigos/percursos_avl
+/codigos/percursos_bst
+/codigos/validador
+/exercicio_1/ex1
 
-# Permite recursivamente arquivos dentro das pastas do projeto
-/AVL/**/*.c
-/AVL/**/*.h
-/BST/**/*.c
-/BST/**/*.h
-/fila/**/*.c
-/fila/**/*.h
-/pilha/**/*.c
-/pilha/**/*.h
-/lista/**/*.c
-/lista/**/*.h
-/apps/**/*.c
-/apps/**/*.h
+# ============================================================
+# Logs
+# ============================================================
 
-# Ignora arquivos temporários de sistemas e IDEs
+*.log
+
+# ============================================================
+# Arquivos temporários
+# ============================================================
+
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ============================================================
+# Python
+# ============================================================
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# ============================================================
+# LaTeX - arquivos auxiliares
+# ============================================================
+
+*.aux
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+
+# ============================================================
+# Sistema operacional / IDE
+# ============================================================
+
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
-*.swp
-*.swo
-*~

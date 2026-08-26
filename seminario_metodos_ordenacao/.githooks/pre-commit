@@ -1,0 +1,41 @@
+#!/bin/sh
+
+echo "Limpando arquivos gerados..."
+
+rm -f Apresentacao/*.aux
+rm -f Apresentacao/*.log
+rm -f Apresentacao/*.nav
+rm -f Apresentacao/*.out
+rm -f Apresentacao/*.snm
+rm -f Apresentacao/*.toc
+rm -f Apresentacao/*.vrb
+rm -f Apresentacao/*.fls
+rm -f Apresentacao/*.fdb_latexmk
+rm -f Apresentacao/*.synctex.gz
+
+
+rm -f Apresentacao/main_auto.pdf
+
+rm -f Codigo/bin/bubble
+rm -f Codigo/bin/merge
+rm -f Codigo/bin/gerar_vetor
+
+
+rm -rf Codigo/logs
+
+
+rm -f Codigo/bubble/*.png
+rm -f Codigo/merge/*.png
+
+
+rm -f Codigo/*_table.tex
+rm -f Codigo/metricas.json
+
+
+rmdir Codigo/logs 2>/dev/null || true
+
+
+
+git add -u
+
+echo "Limpeza concluída."

@@ -1,0 +1,121 @@
+name: Check Repository
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  repository-check:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check generated files
+        shell: bash
+        run: |
+
+          echo "Verificando arquivos gerados..."
+
+          forbidden=(
+            "Codigo/bin/bubble"
+            "Codigo/bin/merge"
+            "Codigo/bin/gerar_vetor"
+            "Codigo/metricas.json"
+          )
+
+          failed=0
+
+          for file in "${forbidden[@]}"; do
+
+            if git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
+
+              echo "ERRO: arquivo gerado versionado:"
+              echo "      $file"
+
+              failed=1
+
+            fi
+
+          done
+
+          if [ "$failed" -ne 0 ]; then
+
+            echo
+            echo "O repositório contém arquivos gerados."
+            echo "Execute o hook pre-commit ou remova-os do Git."
+
+            exit 1
+
+          fi
+
+          echo "Nenhum arquivo gerado proibido encontrado."
+
+
+      - name: Check logs
+        shell: bash
+        run: |
+
+          if git ls-files | grep -E '(^|/)logs/|\.log$'; then
+
+            echo "ERRO: logs encontrados no repositório."
+
+            exit 1
+
+          fi
+
+          echo "Nenhum log versionado."
+
+
+      - name: Check generated images
+        shell: bash
+        run: |
+
+          if git ls-files | grep -E 'Codigo/(bubble|merge)/.*\.png$'; then
+
+            echo "ERRO: imagens de execução encontradas."
+
+            exit 1
+
+          fi
+
+          echo "Nenhuma imagem gerada versionada."
+
+
+      - name: Check LaTeX temporary files
+        shell: bash
+        run: |
+
+          if git ls-files | grep -E '\.(aux|log|nav|out|snm|toc|vrb|fls|fdb_latexmk|synctex\.gz)$'; then
+
+            echo "ERRO: arquivos temporários do LaTeX encontrados."
+
+            exit 1
+
+          fi
+
+          echo "Nenhum arquivo temporário do LaTeX."
+
+
+
+      - name: Check generated PDF
+        shell: bash
+        run: |
+
+          if git ls-files | grep -E '^Apresentacao/.*\.pdf$'; then
+
+            echo "ERRO: PDF gerado encontrado no repositório."
+
+            exit 1
+
+          fi
+
+          echo "Nenhum PDF gerado versionado."
+
+
+      - name: Repository is clean
+        run: echo "Repositório OK."
