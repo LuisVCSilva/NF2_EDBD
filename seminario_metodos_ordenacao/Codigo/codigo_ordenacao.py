@@ -76,6 +76,10 @@ def obter_acoes(args):
 
     acoes = []
 
+
+    if args.run:
+        acoes.append("run")
+
     if args.frames:
         acoes.append("frames")
 
@@ -92,14 +96,15 @@ def obter_acoes(args):
     if not acoes:
 
         acoes = [
+            "run",
             "frames",
             "tables",
             "metrics",
             "presentation"
         ]
 
-    return acoes
 
+    return acoes
 def descobrir_algoritmos():
 
     bin_dir = BASE_DIR / "bin"

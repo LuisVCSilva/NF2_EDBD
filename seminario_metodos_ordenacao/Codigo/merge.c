@@ -1,140 +1,262 @@
-#ifndef ORDENACAO_H
-#define ORDENACAO_H
-
-#include <stdio.h>
-#include <stdlib.h>
+#include "ordenacao.h"
 
 
-static inline void log_evento(
-    const char *evento,
-    int i,
-    int j,
-    const int A[],
+
+void merge(
+    int A[],
+    int inicio,
+    int meio,
+    int fim,
     int n
 )
 {
-    printf(
-        "%s;i=%d;j=%d;A=",
-        evento,
-        i,
-        j
+    int n1 = meio - inicio + 1;
+    int n2 = fim - meio;
+
+
+    int *E = malloc(
+        n1 * sizeof(int)
     );
 
-    for (int k = 0; k < n; k++) {
-
-        printf("%d", A[k]);
-
-        if (k < n - 1)
-            printf(",");
-    }
-
-    printf("\n");
-}
-
-
-/* ============================================================
- * LEITURA DO VETOR
- * ============================================================ */
-
-static inline int ler_vetor(
-    const char *arquivo,
-    int **A
-)
-{
-    FILE *fp = fopen(
-        arquivo,
-        "r"
+    int *D = malloc(
+        n2 * sizeof(int)
     );
 
-    if (fp == NULL) {
 
-        perror(
-            "Erro ao abrir arquivo"
-        );
+    if (E == NULL || D == NULL) {
 
-        return -1;
+        free(E);
+        free(D);
+
+        return;
     }
 
 
-    int capacidade = 10;
-    int n = 0;
+    for (int i = 0; i < n1; i++) {
 
-    int *vetor = malloc(
-        capacidade * sizeof(int)
-    );
-
-    if (vetor == NULL) {
-
-        perror(
-            "Erro ao alocar memoria"
-        );
-
-        fclose(fp);
-
-        return -1;
+        E[i] = A[inicio + i];
     }
 
 
-    int valor;
+    for (int j = 0; j < n2; j++) {
+
+        D[j] = A[meio + 1 + j];
+    }
+
+
+    int i = 0;
+    int j = 0;
+    int k = inicio;
+
 
     while (
-        fscanf(
-            fp,
-            "%d",
-            &valor
-        ) == 1
+        i < n1 &&
+        j < n2
     ) {
 
-        if (n >= capacidade) {
-
-            capacidade *= 2;
-
-            int *novo = realloc(
-                vetor,
-                capacidade * sizeof(int)
-            );
-
-            if (novo == NULL) {
-
-                perror(
-                    "Erro ao realocar memoria"
-                );
-
-                free(vetor);
-
-                fclose(fp);
-
-                return -1;
-            }
-
-            vetor = novo;
-        }
-
-        vetor[n] = valor;
-
-        n++;
-    }
-
-
-    fclose(fp);
-
-
-    if (n == 0) {
-
-        free(vetor);
-
-        fprintf(
-            stderr,
-            "Arquivo vazio ou sem valores inteiros.\n"
+        log_evento(
+            "COMPARACAO",
+            i,
+            j,
+            A,
+            n
         );
 
-        return -1;
+
+        if (E[i] <= D[j]) {
+
+            A[k] = E[i];
+
+            i++;
+
+        } else {
+
+            A[k] = D[j];
+
+            j++;
+        }
+
+
+        log_evento(
+            "ATRIBUICAO",
+            k,
+            -1,
+            A,
+            n
+        );
+
+
+        k++;
     }
 
 
-    *A = vetor;
+    while (i < n1) {
 
-    return n;
+        A[k] = E[i];
+
+        log_evento(
+            "ATRIBUICAO",
+            k,
+            -1,
+            A,
+            n
+        );
+
+        i++;
+        k++;
+    }
+
+
+    while (j < n2) {
+
+        A[k] = D[j];
+
+        log_evento(
+            "ATRIBUICAO",
+            k,
+            -1,
+            A,
+            n
+        );
+
+        j++;
+        k++;
+    }
+
+
+    free(E);
+    free(D);
 }
 
-#endif
+
+
+void merge_sort_rec(
+    int A[],
+    int inicio,
+    int fim,
+    int n
+)
+{
+    if (inicio >= fim) {
+        return;
+    }
+
+    int meio =
+        inicio +
+        (fim - inicio) / 2;
+
+    log_evento(
+        "SPLIT",
+        inicio,
+        fim,
+        A,
+        n
+    );
+
+    merge_sort_rec(
+        A,
+        inicio,
+        meio,
+        n
+    );
+
+    merge_sort_rec(
+        A,
+        meio + 1,
+        fim,
+        n
+    );
+
+    log_evento(
+        "MERGE",
+        inicio,
+        fim,
+        A,
+        n
+    );
+
+    merge(
+        A,
+        inicio,
+        meio,
+        fim,
+        n
+    );
+}
+
+
+
+void merge_sort(
+    int A[],
+    int n
+)
+{
+    log_evento(
+        "INICIO",
+        -1,
+        -1,
+        A,
+        n
+    );
+
+
+    merge_sort_rec(
+        A,
+        0,
+        n - 1,
+        n
+    );
+
+
+    log_evento(
+        "FIM",
+        -1,
+        -1,
+        A,
+        n
+    );
+}
+
+
+
+int main(
+    int argc,
+    char *argv[]
+)
+{
+
+    const char *arquivo = "entrada/vetor.txt";
+
+
+    if (argc >= 2) {
+
+        arquivo = argv[1];
+    }
+
+
+    int *A = NULL;
+
+
+    int n = ler_vetor(
+        arquivo,
+        &A
+    );
+
+
+    if (n <= 0) {
+
+        return EXIT_FAILURE;
+    }
+
+
+    merge_sort(
+        A,
+        n
+    );
+
+
+    free(A);
+
+
+    return EXIT_SUCCESS;
+}

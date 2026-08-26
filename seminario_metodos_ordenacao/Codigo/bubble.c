@@ -66,7 +66,7 @@ int main(
     char *argv[]
 )
 {
-    const char *arquivo = "entrada.txt";
+    const char *arquivo = "entrada/vetor.txt";
 
 
     if (argc >= 2) {
