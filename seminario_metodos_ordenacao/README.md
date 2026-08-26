@@ -1,6 +1,6 @@
 # Algoritmos de Ordenação — Bubble Sort e Merge Sort
 
-Material de apoio para o seminário sobre algoritmos de ordenação, desenvolvido em C, Python e LaTeX Beamer.
+Material de apoio para o seminário sobre algoritmos de ordenação, desenvolvido em C, Python e $\LaTeX$ Beamer.
 
 O projeto foi estruturado como uma pequena infraestrutura experimental para permitir que os alunos:
 
@@ -30,7 +30,7 @@ flowchart TD
     A["Vetor de entrada"] --> B["Algoritmos de ordenação<br/>C"]
     B --> C["Logs de execução"]
 
-    C --> D["Análise e processamento<br/>codigo_ordenacao.py"]
+    C --> D["Análise e processamento<br/>pipeline_ordenacao.py"]
 
     D --> E["Visualizações<br/>PNG"]
     D --> F["Tabelas<br/>LaTeX"]
@@ -65,7 +65,7 @@ flowchart TD
     E1 --> L["Logs de eventos"]
     E2 --> L
 
-    L --> PY["codigo_ordenacao.py"]
+    L --> PY["pipeline_ordenacao.py"]
 
     PY --> P["Gráficos PNG"]
     PY --> T["Tabelas LaTeX"]
@@ -160,7 +160,7 @@ Codigo/logs/merge.log
 O arquivo:
 
 ```text
-Codigo/codigo_ordenacao.py
+Codigo/pipeline_ordenacao.py
 ```
 
 é responsável por interpretar os logs.
@@ -173,7 +173,7 @@ A partir desses eventos, pode gerar:
 ```mermaid
 flowchart TD
     LOG["LOG"]
-    PY["codigo_ordenacao.py"]
+    PY["pipeline_ordenacao.py"]
 
     LOG --> PY
 
@@ -233,7 +233,7 @@ A estrutura atual é:
 │   ├── bubble.c
 │   ├── merge.c
 │   ├── gerar_vetor.c
-│   ├── codigo_ordenacao.py
+│   ├── pipeline_ordenacao.py
 │   │
 │   ├── bubble_table.tex
 │   ├── merge_table.tex
@@ -834,21 +834,21 @@ Por exemplo:
 
 ```bash
 cd Codigo
-python3 codigo_ordenacao.py --algorithm selection --run
+python3 pipeline_ordenacao.py --algorithm selection --run
 ```
 
 Para gerar seus frames:
 
 ```bash
 cd Codigo
-python3 codigo_ordenacao.py --algorithm selection --run --frames
+python3 pipeline_ordenacao.py --algorithm selection --run --frames
 ```
 
 Para gerar métricas:
 
 ```bash
 cd Codigo
-python3 codigo_ordenacao.py \
+python3 pipeline_ordenacao.py \
     --algorithm selection \
     --run \
     --metrics
@@ -858,7 +858,7 @@ Para gerar várias coisas de uma vez:
 
 ```bash
 cd Codigo
-python3 codigo_ordenacao.py \
+python3 pipeline_ordenacao.py \
     --algorithm selection \
     --run \
     --frames \
@@ -891,7 +891,7 @@ Por exemplo:
 ```bash
 cd Codigo
 
-python3 codigo_ordenacao.py \
+python3 pipeline_ordenacao.py \
     --algorithm selection \
     --run \
     --frames \
@@ -919,7 +919,7 @@ Uma das possibilidades é executar:
 ```bash
 cd Codigo
 
-python3 codigo_ordenacao.py \
+python3 pipeline_ordenacao.py \
     --algorithm bubble merge selection \
     --run \
     --frames \
@@ -966,7 +966,7 @@ flowchart TD
     MS --> LOG
     SS --> LOG
 
-    LOG --> PY["codigo_ordenacao.py"]
+    LOG --> PY["pipeline_ordenacao.py"]
 
     PY --> PNG["PNGs"]
     PY --> TAB["Tabelas"]
@@ -1221,7 +1221,7 @@ flowchart TD
     SRC["seu_alg.c"]
     EXE["seu_algoritmo"]
     LOG["LOG"]
-    PY["codigo_ordenacao.py"]
+    PY["pipeline_ordenacao.py"]
 
     ALG --> SRC
     SRC --> EXE

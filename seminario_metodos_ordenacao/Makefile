@@ -124,7 +124,7 @@ input: $(GERADOR) | $(INPUT_DIR)
 run: compile input
 
 	cd Codigo && \
-	$(PYTHON) codigo_ordenacao.py --run
+	$(PYTHON) pipeline_ordenacao.py --run
 
 
 
@@ -134,7 +134,7 @@ run: compile input
 frames: run
 
 	cd Codigo && \
-	$(PYTHON) codigo_ordenacao.py --frames
+	$(PYTHON) pipeline_ordenacao.py --frames
 
 
 
@@ -144,7 +144,7 @@ frames: run
 tables: run
 
 	cd Codigo && \
-	$(PYTHON) codigo_ordenacao.py --tables
+	$(PYTHON) pipeline_ordenacao.py --tables
 
 
 
@@ -154,7 +154,7 @@ tables: run
 metrics: run
 
 	cd Codigo && \
-	$(PYTHON) codigo_ordenacao.py --metrics
+	$(PYTHON) pipeline_ordenacao.py --metrics
 
 
 
@@ -176,7 +176,7 @@ benchmark: metrics
 presentation: tables frames
 
 	cd Codigo && \
-	$(PYTHON) codigo_ordenacao.py --presentation
+	$(PYTHON) pipeline_ordenacao.py --presentation
 
 
 
@@ -186,7 +186,7 @@ presentation: tables frames
 pdf: presentation
 
 	cd Apresentacao && \
-	$(LATEX) -interaction=nonstopmode main_auto.tex
+	$(LATEX) -interaction=nonstopmode main_auto.tex > /dev/null
 
 
 

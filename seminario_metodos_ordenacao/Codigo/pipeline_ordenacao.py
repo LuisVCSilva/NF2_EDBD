@@ -3,7 +3,7 @@ import subprocess
 import sys
 import time
 import matplotlib.pyplot as plt
-
+from tqdm import tqdm
 import json
 import os
 import subprocess
@@ -112,11 +112,17 @@ def descobrir_algoritmos():
     if not bin_dir.exists():
         return []
 
+    algoritmos = {
+        "bubble",
+        "merge"
+    }
+
     return sorted(
         arquivo.name
         for arquivo in bin_dir.iterdir()
         if arquivo.is_file()
         and os.access(arquivo, os.X_OK)
+        and arquivo.name in algoritmos
     )
 
 def executar(executavel, arquivo_log):
@@ -491,9 +497,9 @@ class FrameWriter:
 
         plt.close(fig)
 
-        print(
-            f"  {caminho}"
-        )
+        #print(
+        #    f"  {caminho}"
+        #)
 
 
 
@@ -512,7 +518,7 @@ def gerar_frames(algoritmo, saida):
 
     contador = 0
 
-    for linha in saida.splitlines():
+    for linha in tqdm(saida.splitlines()):
 
         linha = linha.strip()
 
@@ -582,7 +588,7 @@ def gerar_frames(algoritmo, saida):
 
         plt.close(fig)
 
-        print(caminho)
+        #print(caminho)
 
     return contador
 
@@ -750,7 +756,7 @@ def main():
 
 
 
-    for algoritmo in algoritmos:
+    for algoritmo in tqdm(algoritmos):
 
         executavel = (
             BASE_DIR
@@ -792,14 +798,14 @@ def main():
 
         print()
 
-        print("=" * 60)
+        #print("=" * 60)
 
-        print(
-            f"PROCESSANDO "
-            f"{algoritmo.upper()} SORT"
-        )
+        #print(
+        #    f"PROCESSANDO "
+        #    f"{algoritmo.upper()} SORT"
+        #)
 
-        print("=" * 60)
+        #print("=" * 60)
 
 
 
