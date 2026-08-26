@@ -1,6 +1,6 @@
 # Algoritmos de Ordenação — Bubble Sort e Merge Sort
 
-Material de apoio para o seminário sobre algoritmos de ordenação, desenvolvido em C, Python e $\LaTeX$ Beamer.
+Material de apoio para o seminário sobre algoritmos de ordenação, desenvolvido em C, Python e \(\LaTeX\) Beamer.
 
 O projeto foi estruturado como uma pequena infraestrutura experimental para permitir que os alunos:
 
