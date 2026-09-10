@@ -306,11 +306,6 @@ int main(int argc, char *argv[]) {
 
     int resultado = bipartido_bfs(&g);
 
-
-    /*
-       Saída EXATA da prova.
-    */
-
     if (resultado) {
         printf("DIVISAO_POSSIVEL\n");
     } else {
