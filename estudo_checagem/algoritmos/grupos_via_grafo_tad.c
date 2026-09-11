@@ -212,7 +212,6 @@ void liberar_fila(Fila *f)
 /* ============================================================
    TAD GRAFO - VERIFICAR BIPARTIÇÃO
    ============================================================ */
-
 int bipartido_bfs(Grafo *g)
 {
     int cor[MAX];
@@ -228,9 +227,10 @@ int bipartido_bfs(Grafo *g)
        -> Grupo 1
     */
 
-    for (int i = 0; i < g->n; i++) {
-        cor[i] = -1;
-    }
+    /*
+       FALTA:
+       Inicializar todos os vértices com cor -1.
+    */
 
 
     /*
@@ -242,39 +242,63 @@ int bipartido_bfs(Grafo *g)
 
     for (int s = 0; s < g->n; s++) {
 
-        if (cor[s] != -1)
-            continue;
+        /*
+           FALTA:
+           Verificar se s já foi visitado.
+
+           Se já possuir uma cor, deve ser
+           ignorado e o próximo vértice deve
+           ser analisado.
+        */
 
 
         /*
            Começa uma nova componente.
+
+           FALTA:
+           Criar a fila e inicializá-la.
         */
 
-        Fila *f = criar_fila();
 
-        if (f == NULL)
-            return 0;
+        /*
+           FALTA:
+           Verificar se a criação da fila
+           falhou.
+        */
 
 
         /*
            Primeiro vértice recebe
            o Grupo 0.
+
+           FALTA:
+           Atribuir a cor 0 ao vértice s
+           e inseri-lo na fila.
         */
-
-        cor[s] = 0;
-
-        enfileirar(f, s);
 
 
         /*
            BFS
+
+           FALTA:
+           Repetir enquanto a fila
+           não estiver vazia.
         */
 
-        while (!fila_vazia(f)) {
+        {
 
-            int u = desenfileirar(f);
+            /*
+               FALTA:
+               Retirar da fila o próximo
+               vértice a ser processado.
+            */
 
-            No *p = g->adj[u].inicio;
+
+            /*
+               FALTA:
+               Obter o início da lista de
+               adjacência do vértice u.
+            */
 
 
             /*
@@ -282,56 +306,65 @@ int bipartido_bfs(Grafo *g)
                adjacência de u.
             */
 
-            while (p != NULL) {
+            while (/* FALTA: verificar se ainda existem vizinhos */) {
 
-                int v = p->vertice;
+                /*
+                   FALTA:
+                   Obter o vértice v armazenado
+                   no nó atual da lista.
+                */
 
 
                 /*
                    v ainda não possui grupo.
+
+                   FALTA:
+                   1. Verificar se cor[v] == -1.
+                   2. Colocar v no grupo oposto
+                      ao grupo de u.
+                   3. Inserir v na fila.
                 */
-
-                if (cor[v] == -1) {
-
-                    /*
-                       Coloca v no grupo
-                       oposto ao de u.
-                    */
-
-                    cor[v] = 1 - cor[u];
-
-                    enfileirar(f, v);
-                }
 
 
                 /*
                    v já possui grupo.
 
-                   Se estiver no mesmo grupo
-                   de u, existe conflito.
+                   FALTA:
+                   Verificar se v está no mesmo
+                   grupo de u.
+
+                   Se estiver, existe conflito:
+                   o grafo não é bipartido.
+
+                   Nesse caso:
+                   1. Liberar a fila.
+                   2. Retornar 0.
                 */
 
-                else if (cor[v] == cor[u]) {
 
-                    liberar_fila(f);
-
-                    return 0;
-                }
-
-
-                p = p->prox;
+                /*
+                   FALTA:
+                   Avançar para o próximo nó
+                   da lista de adjacência.
+                */
             }
         }
 
-        liberar_fila(f);
+        /*
+           FALTA:
+           Liberar a fila ao terminar
+           o processamento da componente.
+        */
     }
 
 
     /*
        Nenhum conflito foi encontrado.
-    */
 
-    return 1;
+       FALTA:
+       Retornar o valor correspondente
+       a "grafo bipartido".
+    */
 }
 
 

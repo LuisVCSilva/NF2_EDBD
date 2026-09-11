@@ -1,0 +1,346 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{geometry}
+
+\geometry{margin=2.5cm}
+
+\title{Algoritmo Espectral para Verificação de Bipartição de Grafos}
+\author{Prof. Me. Luis Vinicius Costa Silva}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Problema}
+
+Considere um grafo simples e não direcionado
+
+$$
+G=(V,E),
+$$
+
+em que cada vértice representa um elemento e cada aresta representa
+um conflito entre dois elementos.
+
+O objetivo é determinar se os vértices podem ser divididos em dois
+grupos de modo que nenhum par de vértices conflitantes pertença ao
+mesmo grupo.
+
+Esse problema é equivalente a determinar se o grafo é
+\emph{bipartido}.
+
+\section{Representação por matriz de adjacência}
+
+Seja $A\in\mathbb{R}^{n\times n}$ a matriz de adjacência de $G$,
+definida por
+
+$$
+A_{ij} =
+\begin{cases}
+1, & \text{se } (i,j)\in E,\\
+0, & \text{caso contrário}.
+\end{cases}
+$$
+
+Como o grafo é não direcionado, temos
+
+$$
+A=A^T.
+$$
+
+Consequentemente, todos os autovalores de $A$ são reais.
+
+\section{Caracterização espectral}
+
+Um resultado fundamental da teoria espectral de grafos estabelece que
+um grafo não direcionado é bipartido se, e somente se, o espectro de
+sua matriz de adjacência é simétrico em relação à origem.
+
+Se
+
+$$
+\lambda_1,\lambda_2,\ldots,\lambda_n
+$$
+
+são os autovalores de $A$, então $G$ é bipartido se, e somente se, para
+cada autovalor $\lambda$, também existe o autovalor $-\lambda$, com a
+mesma multiplicidade.
+
+Assim,
+
+$$
+G\text{ é bipartido}
+\iff
+\operatorname{spec}(A)
+=
+-\operatorname{spec}(A).
+$$
+
+Após ordenar os autovalores de forma crescente,
+
+$$
+\lambda_1\leq\lambda_2\leq\cdots\leq\lambda_n,
+$$
+
+a condição pode ser verificada por
+
+$$
+\lambda_i=-\lambda_{n+1-i},
+\qquad
+i=1,\ldots,n.
+$$
+
+Em uma implementação numérica, devido aos erros de ponto flutuante,
+utiliza-se uma tolerância $\varepsilon>0$:
+
+$$
+\left|\lambda_i+\lambda_{n+1-i}\right|<\varepsilon.
+$$
+
+\section{Justificativa}
+
+Suponha que $G$ seja bipartido, com partições $V_1$ e $V_2$.
+Reordenando os vértices de modo que os vértices de $V_1$ apareçam
+primeiro e os de $V_2$ depois, sua matriz de adjacência possui a forma
+
+$$
+A=
+\begin{pmatrix}
+0 & B\\
+B^T & 0
+\end{pmatrix}.
+$$
+
+Considere um autovetor
+
+$$
+\begin{pmatrix}
+x\\y
+\end{pmatrix}
+$$
+
+associado ao autovalor $\lambda$. Então
+
+$$
+A
+\begin{pmatrix}
+x\\y
+\end{pmatrix}
+=
+\lambda
+\begin{pmatrix}
+x\\y
+\end{pmatrix}.
+$$
+
+Isso implica
+
+$$
+By=\lambda x
+$$
+
+e
+
+$$
+B^Tx=\lambda y.
+$$
+
+Consequentemente,
+
+$$
+A
+\begin{pmatrix}
+x\\-y
+\end{pmatrix}
+=
+-\lambda
+\begin{pmatrix}
+x\\-y
+\end{pmatrix}.
+$$
+
+Portanto, sempre que $\lambda$ é autovalor, $-\lambda$ também é
+autovalor. O espectro é, assim, simétrico em relação a zero.
+
+O resultado inverso também é válido: se o espectro da matriz de
+adjacência é simétrico em relação a zero, então o grafo é bipartido.
+
+\section{Algoritmo}
+
+A abordagem espectral consiste nas seguintes etapas:
+
+\begin{enumerate}
+\item construir a matriz de adjacência $A$;
+\item calcular todos os autovalores de $A$;
+\item ordenar os autovalores;
+\item comparar cada autovalor com o seu correspondente oposto;
+\item se todos os pares forem compatíveis, declarar que a divisão
+em dois grupos é possível;
+\item caso contrário, declarar que a divisão é impossível.
+\end{enumerate}
+
+\begin{algorithm}
+\caption{Verificação espectral de bipartição}
+\begin{algorithmic}[1]
+
+\Require Grafo $G=(V,E)$ e tolerância $\varepsilon$
+\Ensure Possibilidade ou impossibilidade de divisão em dois grupos
+
+\State Construir a matriz de adjacência $A$
+\State Calcular os autovalores
+
+$$
+\lambda_1,\ldots,\lambda_n
+$$
+
+de $A$
+\State Ordenar os autovalores de forma crescente
+
+\For{$i=1$ até $n$}
+\If{$|\lambda_i+\lambda_{n+1-i}|>\varepsilon$}
+\State \Return \textbf{DIVISÃO IMPOSSÍVEL}
+\EndIf
+\EndFor
+
+\State \Return \textbf{DIVISÃO POSSÍVEL}
+
+\end{algorithmic}
+\end{algorithm}
+
+\section{Exemplo}
+
+Considere o caminho com quatro vértices:
+
+$$
+0-1-2-3.
+$$
+
+Sua matriz de adjacência é
+
+$$
+A=
+\begin{pmatrix}
+0&1&0&0\\
+1&0&1&0\\
+0&1&0&1\\
+0&0&1&0
+\end{pmatrix}.
+$$
+
+Os autovalores são aproximadamente
+
+$$
+-1.618,\quad
+-0.618,\quad
+0.618,\quad
+1.618.
+$$
+
+Observa-se que
+
+$$
+-1.618\approx -0.618? 
+$$
+
+Mais precisamente, os pares simétricos são
+
+$$
+-1.618\leftrightarrow1.618
+$$
+
+e
+
+$$
+-0.618\leftrightarrow0.618.
+$$
+
+Logo, o espectro é simétrico em relação a zero e o grafo é bipartido.
+
+Uma possível divisão é
+
+$$
+V_1=\{0,2\},
+\qquad
+V_2=\{1,3\}.
+$$
+
+Portanto,
+
+$$
+\boxed{\text{DIVISÃO POSSÍVEL}}
+$$
+
+\section{Implementação numérica}
+
+Como a matriz de adjacência de um grafo não direcionado é simétrica,
+pode-se utilizar o método de Jacobi para calcular seus autovalores.
+
+O método aplica sucessivas rotações ortogonais à matriz até que os
+elementos fora da diagonal sejam suficientemente pequenos. Ao final,
+os elementos da diagonal fornecem aproximações dos autovalores.
+
+Na implementação em C, pode-se utilizar uma condição de convergência
+como
+
+$$
+\max_{i\neq j}|A_{ij}|<\varepsilon.
+$$
+
+Os autovalores obtidos são então ordenados e submetidos ao teste de
+simetria descrito anteriormente.
+
+\section{Complexidade}
+
+Para uma matriz de adjacência de dimensão $n$, o armazenamento requer
+
+$$
+O(n^2)
+$$
+
+posições de memória.
+
+O cálculo dos autovalores por um método iterativo como Jacobi possui
+custo computacional superior ao da solução baseada em busca em largura.
+Em contraste, a verificação de bipartição por BFS possui complexidade
+
+$$
+O(|V|+|E|)
+$$
+
+quando o grafo é representado por lista de adjacência.
+
+Assim, a abordagem espectral não é necessariamente a mais eficiente
+para decidir bipartição. Sua principal vantagem, neste contexto, é
+demonstrar a relação entre a estrutura do grafo e o espectro de sua
+matriz de adjacência.
+
+\section{Conclusão}
+
+O problema de dividir os vértices em dois grupos sem conflitos é
+equivalente ao problema de verificar se o grafo é bipartido.
+
+A abordagem espectral resolve essa questão por meio de uma propriedade
+dos autovalores da matriz de adjacência:
+
+$$
+\boxed{
+G\text{ é bipartido}
+\iff
+\operatorname{spec}(A)
+=
+-\operatorname{spec}(A)
+}
+$$
+
+Dessa forma, a solução transforma um problema combinatório de
+coloração em um problema de álgebra linear envolvendo os autovalores
+da matriz de adjacência.
+
+\end{document}

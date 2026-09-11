@@ -76,7 +76,6 @@ void adicionar_aresta(Grafo *g, int u, int v) {
 /* ============================================================
    BFS + 2-COLORAÇÃO
    ============================================================ */
-
 int bipartido_bfs(Grafo *g) {
 
     int cor[MAX];
@@ -87,9 +86,10 @@ int bipartido_bfs(Grafo *g) {
         1 = Grupo 1
     */
 
-    for (int i = 0; i < g->n; i++) {
-        cor[i] = -1;
-    }
+    /*
+       FALTA:
+       Inicializar todos os vértices com cor -1.
+    */
 
 
     /*
@@ -100,28 +100,37 @@ int bipartido_bfs(Grafo *g) {
 
     for (int s = 0; s < g->n; s++) {
 
-        /* Já foi processado */
-        if (cor[s] != -1) {
-            continue;
-        }
+        /*
+           FALTA:
+           Verificar se o vértice s já foi colorido.
+           Se já foi processado, deve ser ignorado.
+        */
 
 
-        /* Nova componente */
+        /*
+           Nova componente
 
-        Fila fila;
-
-        inicializar_fila(&fila);
-
-        cor[s] = 0;
-
-        enfileirar(&fila, s);
+           FALTA:
+           1. Criar uma fila.
+           2. Inicializar a fila.
+           3. Atribuir uma cor inicial ao vértice s.
+           4. Inserir s na fila.
+        */
 
 
         /* BFS */
 
-        while (!fila_vazia(&fila)) {
+        /*
+           FALTA:
+           Repetir enquanto a fila não estiver vazia.
+        */
 
-            int u = desenfileirar(&fila);
+        {
+
+            /*
+               FALTA:
+               Retirar um vértice u da fila.
+            */
 
 
             /*
@@ -131,45 +140,49 @@ int bipartido_bfs(Grafo *g) {
 
             for (int v = 0; v < g->n; v++) {
 
-                /* Não existe aresta u -> v */
-                if (g->adj[u][v] == 0) {
-                    continue;
-                }
+                /*
+                   FALTA:
+                   Verificar se existe uma aresta entre u e v.
+
+                   Se não existir, v não é vizinho de u
+                   e deve ser ignorado.
+                */
 
 
                 /*
                    Vizinho ainda não colorido:
                    recebe a cor oposta.
+
+                   FALTA:
+                   1. Verificar se cor[v] == -1.
+                   2. Atribuir a v a cor oposta à de u.
+                   3. Inserir v na fila.
                 */
-
-                if (cor[v] == -1) {
-
-                    cor[v] = 1 - cor[u];
-
-                    enfileirar(&fila, v);
-                }
 
 
                 /*
-                   Vizinho com a mesma cor:
-                   conflito!
+                   Vizinho já colorido.
+
+                   FALTA:
+                   Verificar se v possui a mesma cor de u.
+
+                   Se possuir, existe um conflito e o grafo
+                   NÃO é bipartido.
                 */
 
-                else if (cor[v] == cor[u]) {
-
-                    return 0;
-                }
             }
         }
     }
 
 
     /*
-       Todas as componentes foram processadas
-       sem encontrar conflito.
-    */
+       Se todas as componentes forem processadas sem
+       encontrar conflitos, o grafo é bipartido.
 
-    return 1;
+       FALTA:
+       Retornar o valor correspondente a
+       "grafo bipartido".
+    */
 }
 
 
