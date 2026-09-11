@@ -4,22 +4,18 @@
 #define MAX 100
 
 /* ============================================================
-   ESTRUTURAS
+   GRAFO COM MATRIZ DE ADJACÊNCIA
    ============================================================ */
-
-typedef struct No {
-    int vertice;
-    struct No *prox;
-} No;
-
-typedef struct {
-    No *inicio;
-} Lista;
 
 typedef struct {
     int n;
-    Lista adj[MAX];
+    int adj[MAX][MAX];
 } Grafo;
+
+
+/* ============================================================
+   FILA
+   ============================================================ */
 
 typedef struct {
     int dados[MAX];
@@ -27,54 +23,6 @@ typedef struct {
     int fim;
 } Fila;
 
-
-/* ============================================================
-   LISTA DE ADJACÊNCIA
-   ============================================================ */
-
-No *criar_no(int v) {
-    No *novo = malloc(sizeof(No));
-
-    if (novo == NULL) {
-        exit(1);
-    }
-
-    novo->vertice = v;
-    novo->prox = NULL;
-
-    return novo;
-}
-
-
-void inicializar_grafo(Grafo *g, int n) {
-    g->n = n;
-
-    for (int i = 0; i < n; i++) {
-        g->adj[i].inicio = NULL;
-    }
-}
-
-
-void adicionar_aresta(Grafo *g, int u, int v) {
-
-    /* u -> v */
-    No *novo1 = criar_no(v);
-
-    novo1->prox = g->adj[u].inicio;
-    g->adj[u].inicio = novo1;
-
-
-    /* v -> u */
-    No *novo2 = criar_no(u);
-
-    novo2->prox = g->adj[v].inicio;
-    g->adj[v].inicio = novo2;
-}
-
-
-/* ============================================================
-   FILA
-   ============================================================ */
 
 void inicializar_fila(Fila *f) {
     f->inicio = 0;
@@ -96,10 +44,32 @@ void enfileirar(Fila *f, int v) {
 
 
 int desenfileirar(Fila *f) {
-    int v = f->dados[f->inicio];
-    f->inicio++;
+    return f->dados[f->inicio++];
+}
 
-    return v;
+
+/* ============================================================
+   GRAFO
+   ============================================================ */
+
+void inicializar_grafo(Grafo *g, int n) {
+
+    g->n = n;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            g->adj[i][j] = 0;
+        }
+    }
+}
+
+
+void adicionar_aresta(Grafo *g, int u, int v) {
+
+    /* Grafo não direcionado */
+
+    g->adj[u][v] = 1;
+    g->adj[v][u] = 1;
 }
 
 
@@ -125,19 +95,19 @@ int bipartido_bfs(Grafo *g) {
     /*
        Percorre todos os vértices.
 
-       Isso é importante para tratar componentes
-       desconectados.
+       Isso permite tratar componentes desconectados.
     */
 
     for (int s = 0; s < g->n; s++) {
 
-        /* Já pertence a algum componente processado */
+        /* Já foi processado */
         if (cor[s] != -1) {
             continue;
         }
 
 
         /* Nova componente */
+
         Fila fila;
 
         inicializar_fila(&fila);
@@ -148,16 +118,23 @@ int bipartido_bfs(Grafo *g) {
 
 
         /* BFS */
+
         while (!fila_vazia(&fila)) {
 
             int u = desenfileirar(&fila);
 
-            No *p = g->adj[u].inicio;
 
+            /*
+               Percorre todos os possíveis vizinhos
+               de u através da matriz.
+            */
 
-            while (p != NULL) {
+            for (int v = 0; v < g->n; v++) {
 
-                int v = p->vertice;
+                /* Não existe aresta u -> v */
+                if (g->adj[u][v] == 0) {
+                    continue;
+                }
 
 
                 /*
@@ -174,7 +151,7 @@ int bipartido_bfs(Grafo *g) {
 
 
                 /*
-                   Vizinho já colorido com a mesma cor:
+                   Vizinho com a mesma cor:
                    conflito!
                 */
 
@@ -182,9 +159,6 @@ int bipartido_bfs(Grafo *g) {
 
                     return 0;
                 }
-
-
-                p = p->prox;
             }
         }
     }
@@ -196,30 +170,6 @@ int bipartido_bfs(Grafo *g) {
     */
 
     return 1;
-}
-
-
-/* ============================================================
-   LIBERAÇÃO DA MEMÓRIA
-   ============================================================ */
-
-void liberar_grafo(Grafo *g) {
-
-    for (int i = 0; i < g->n; i++) {
-
-        No *p = g->adj[i].inicio;
-
-        while (p != NULL) {
-
-            No *temp = p;
-
-            p = p->prox;
-
-            free(temp);
-        }
-
-        g->adj[i].inicio = NULL;
-    }
 }
 
 
@@ -248,10 +198,6 @@ int main(int argc, char *argv[]) {
     int E = atoi(argv[2]);
 
 
-    /*
-       Verificação básica dos limites.
-    */
-
     if (V < 0 || V > MAX || E < 0) {
         return 1;
     }
@@ -277,9 +223,6 @@ int main(int argc, char *argv[]) {
         int u, v;
 
         if (scanf("%d %d", &u, &v) != 2) {
-
-            liberar_grafo(&g);
-
             return 1;
         }
 
@@ -289,9 +232,6 @@ int main(int argc, char *argv[]) {
         */
 
         if (u < 0 || u >= V || v < 0 || v >= V) {
-
-            liberar_grafo(&g);
-
             return 1;
         }
 
@@ -306,14 +246,13 @@ int main(int argc, char *argv[]) {
 
     int resultado = bipartido_bfs(&g);
 
+
     if (resultado) {
         printf("DIVISAO_POSSIVEL\n");
     } else {
         printf("DIVISAO_IMPOSSIVEL\n");
     }
 
-
-    liberar_grafo(&g);
 
     return 0;
 }
